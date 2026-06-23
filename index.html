@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rinshad & Sabeeha — 1000 Days</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #12121a;
+      --card: #16161f;
+      --accent: #c9a96e;
+      --accent2: #e8c99a;
+      --text: #f0ece4;
+      --text2: #a89f91;
+      --border: rgba(201, 169, 110, 0.2);
+    }
+
+    .theme-blush {
+      --bg: #1a0a10;
+      --bg2: #220d16;
+      --card: #1e0f18;
+      --accent: #e07a9a;
+      --accent2: #f0b0c8;
+      --text: #f5eaee;
+      --text2: #b08090;
+      --border: rgba(224, 122, 154, 0.2);
+    }
+
+    .theme-ocean {
+      --bg: #060d1a;
+      --bg2: #0a1428;
+      --card: #0d1a2e;
+      --accent: #4a9fd4;
+      --accent2: #80c4e8;
+      --text: #e4f0f8;
+      --text2: #7a9fb0;
+      --border: rgba(74, 159, 212, 0.2);
+    }
+
+    .theme-forest {
+      --bg: #060f08;
+      --bg2: #0a160c;
+      --card: #0d1a10;
+      --accent: #6abd7a;
+      --accent2: #9ed4a8;
+      --text: #e4f0e6;
+      --text2: #7aaa80;
+      --border: rgba(106, 189, 122, 0.2);
+    }
+
+    .theme-violet {
+      --bg: #0c0814;
+      --bg2: #140f1e;
+      --card: #180e24;
+      --accent: #a07ce0;
+      --accent2: #c4a8f0;
+      --text: #ede8f8;
+      --text2: #907ab0;
+      --border: rgba(160, 124, 224, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    .theme-bar {
+      position: fixed;
+      bottom: 24px;
+      right: 16px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .theme-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--text2);
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      margin-bottom: 4px;
+    }
+
+    .t-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.3s;
+    }
+
+    .t-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .t-btn.on {
+      border-color: var(--text);
+    }
+
+    .t-btn[data-theme="gold"] {
+      background: radial-gradient(circle at 40% 40%, #e8c99a, #8a6030);
+    }
+
+    .t-btn[data-theme="blush"] {
+      background: radial-gradient(circle at 40% 40%, #f0b0c8, #8a3050);
+    }
+
+    .t-btn[data-theme="ocean"] {
+      background: radial-gradient(circle at 40% 40%, #80c4e8, #1a5080);
+    }
+
+    .t-btn[data-theme="forest"] {
+      background: radial-gradient(circle at 40% 40%, #9ed4a8, #204030);
+    }
+
+    .t-btn[data-theme="violet"] {
+      background: radial-gradient(circle at 40% 40%, #c4a8f0, #502880);
+    }
+
+    .audio-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      transition: background 0.3s;
+    }
+
+    .audio-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    #landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .photo-reel {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .reel-track {
+      display: flex;
+      width: max-content;
+      height: 100%;
+      animation: scrollReel 30s linear infinite;
+    }
+
+    @keyframes scrollReel {
+      0% {
+        transform: translateX(0)
+      }
+
+      100% {
+        transform: translateX(-50%)
+      }
+    }
+
+    .reel-img {
+      flex-shrink: 0;
+      width: 33.33vw;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.2;
+      filter: grayscale(20%);
+    }
+
+    .landing-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(10, 10, 15, 0.3) 0%, rgba(10, 10, 15, 0.6) 60%, var(--bg) 100%);
+    }
+
+    .landing-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 10vw, 4.2rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.6s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent2);
+    }
+
+    .hero-days {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 18vw, 7rem);
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1;
+      margin: 0.3rem 0;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s forwards;
+    }
+
+    .hero-days-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text2);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 1s 1.1s forwards;
+    }
+
+    .enter-btn {
+      display: inline-block;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 36px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+      opacity: 0;
+      animation: fadeUp 1s 1.4s forwards;
+      background: transparent;
+    }
+
+    .enter-btn:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    #main {
+      display: none;
+    }
+
+    #main.visible {
+      display: block;
+    }
+
+    section {
+      padding: 4rem 1.4rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .sec-eyebrow {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 1.4rem;
+    }
+
+    .sec-title em {
+      font-style: italic;
+      color: var(--accent2);
+    }
+
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      margin: 0 0 1.4rem;
+      opacity: 0.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .stat-box {
+      border: 1px solid var(--border);
+      padding: 1.2rem 1rem;
+      text-align: center;
+      background: var(--card);
+    }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text2);
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 6px;
+      bottom: 6px;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .tl-item {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .tl-dot {
+      position: absolute;
+      left: -24px;
+      top: 5px;
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .tl-phase {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .tl-head {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .tl-body {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text2);
+    }
+
+    #gallery-section {
+      padding-top: 2rem;
+    }
+
+    .gallery-intro {
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 2rem;
+      padding: 0 1.4rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 0 1.4rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .gallery-item.wide {
+      grid-column: span 2;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .gallery-item::before {
+      content: '';
+      display: block;
+      padding-top: 100%;
+    }
+
+    .gallery-item.wide::before {
+      padding-top: 56%;
+    }
+
+    .gallery-item img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+      display: block;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.04);
+    }
+
+    .pill-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      color: var(--text2);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      padding: 6px 14px;
+    }
+
+    .letter-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      position: relative;
+    }
+
+    .letter-card::before {
+      content: '"';
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      color: var(--accent);
+      opacity: 0.2;
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      line-height: 1;
+    }
+
+    .letter-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--text);
+      padding-top: 1rem;
+    }
+
+    .letter-sign {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin-top: 1.4rem;
+      text-align: right;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1.5rem 5rem;
+      border-top: 1px solid var(--border);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .footer-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--text2);
+      letter-spacing: 2px;
+    }
+
+    .footer-heart {
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin: 0.6rem 0;
+      display: block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1
+      }
+
+      50% {
+        transform: scale(1.25);
+        opacity: 0.7
+      }
+    }
+
+    .footer-note {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text2);
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .quote-band {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .quote-band p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text);
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .quote-band small {
+      display: block;
+      margin-top: 0.8rem;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- No src here — playlist JS handles loading the songs -->
+  <audio id="bgaudio"></audio>
+  <button class="audio-btn" id="audioBtn" onclick="toggleAudio()" title="Toggle music">♪</button>
+
+  <div class="theme-bar">
+    <span class="theme-label">theme</span>
+    <button class="t-btn on" data-theme="gold" onclick="setTheme('gold',this)"></button>
+    <button class="t-btn" data-theme="blush" onclick="setTheme('blush',this)"></button>
+    <button class="t-btn" data-theme="ocean" onclick="setTheme('ocean',this)"></button>
+    <button class="t-btn" data-theme="forest" onclick="setTheme('forest',this)"></button>
+    <button class="t-btn" data-theme="violet" onclick="setTheme('violet',this)"></button>
+  </div>
+
+  <!-- ══ LANDING ══ -->
+  <div id="landing">
+    <div class="photo-reel">
+      <div class="reel-track">
+        <img class="reel-img" src="photos/1.jpeg" alt="">
+        <img class="reel-img" src="photos/6.jpeg" alt="">
+        <img class="reel-img" src="photos/4.jpeg" alt="">
+        <img class="reel-img" src="photos/5.jpeg" alt="">
+        <img class="reel-img" src="photos/9.jpeg" alt="">
+        <img class="reel-img" src="photos/19.jpeg" alt="">
+        <img class="reel-img" src="photos/1.jpeg" alt="">
+        <img class="reel-img" src="photos/6.jpeg" alt="">
+        <img class="reel-img" src="photos/4.jpeg" alt="">
+        <img class="reel-img" src="photos/5.jpeg" alt="">
+        <img class="reel-img" src="photos/9.jpeg" alt="">
+        <img class="reel-img" src="photos/19.jpeg" alt="">
+      </div>
+    </div>
+    <div class="landing-overlay"></div>
+    <div class="landing-content">
+      <p class="eyebrow">A love story · 1000 days</p>
+      <h1 class="hero-title"><em>Rinshad</em><br><em>&amp; Sabeeha</em></h1>
+      <div class="hero-days">1000</div>
+      <p class="hero-days-label">Days Together</p>
+      <button class="enter-btn" onclick="enterSite()">Enter our world</button>
+    </div>
+  </div>
+
+  <!-- ══ MAIN ══ -->
+  <div id="main">
+
+    <section>
+      <p class="sec-eyebrow reveal">By the numbers</p>
+      <h2 class="sec-title reveal">A <em>thousand days</em><br>of something real</h2>
+      <div class="divider reveal"></div>
+      <div class="stats-grid reveal">
+        <div class="stat-box">
+          <div class="stat-num">1000</div>
+          <div class="stat-lbl">Days together</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">24K</div>
+          <div class="stat-lbl">Hours of us</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">∞</div>
+          <div class="stat-lbl">Memories</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">1</div>
+          <div class="stat-lbl">Person for me</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="quote-band reveal">
+      <p>From the very first glance, something quietly shifted — I didn't know it then, but my heart had already found
+        its answer.</p>
+      <small>— Rinshad</small>
+    </div>
+
+    <section>
+      <p class="sec-eyebrow reveal">How it happened</p>
+      <h2 class="sec-title reveal">Our <em>story</em></h2>
+      <div class="divider reveal"></div>
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-phase">The first sight</div>
+          <div class="tl-head">I saw you</div>
+          <div class="tl-body">That one moment that quietly changed everything. You didn't even know I was looking — but
+            I couldn't look away. Something in me just liked it soo much.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-phase">Chapter two</div>
+          <div class="tl-head">Just friends</div>
+          <div class="tl-body">We talked, we laughed, we understood each other in ways that felt too comfortable for
+            strangers. Conversations that could go on forever.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-phase">Chapter three</div>
+          <div class="tl-head">Best friends</div>
+          <div class="tl-body">The kind of friendship where silence is comfortable and every ordinary moment feels like
+            something worth holding on to. I started changing — for the better, because of you.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-phase">Chapter four</div>
+          <div class="tl-head">Lovers</div>
+          <div class="tl-body">Somewhere between all those moments, we became something I never want to lose. Time
+            together. Your eyes haunt me down every time you look at me.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-phase">Today — Day 1000</div>
+          <div class="tl-head">Still here</div>
+          <div class="tl-body">Still growing. Still choosing each other, every single day. Distance today doesn't change
+            a thing — you're still the person I want to live my life with.</div>
+        </div>
+      </div>
+    </section>
+
+    <div id="gallery-section">
+      <div class="gallery-intro reveal">
+        <p class="sec-eyebrow">Our moments</p>
+        <h2 class="sec-title">Every photo,<br>a <em>memory</em></h2>
+        <div class="divider" style="margin:0 auto;"></div>
+      </div>
+      <div class="gallery-grid reveal">
+        <div class="gallery-item wide"><img src="photos/22.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/8.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/12.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/17.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/19.jpeg" alt=""></div>
+        <div class="gallery-item wide"><img src="photos/15.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/1.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/2.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/4.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/27.jpeg" alt=""></div>
+        <div class="gallery-item wide"><img src="photos/18.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/10.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/20.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/30.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/322.jpeg" alt=""></div>
+        <div class="gallery-item wide"><img src="photos/16.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/6.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/26.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/29.jpeg" alt=""></div>
+        <div class="gallery-item"><img src="photos/9.jpeg" alt=""></div>
+      </div>
+    </div>
+
+    <section>
+      <p class="sec-eyebrow reveal">What I love about you</p>
+      <h2 class="sec-title reveal">Everything,<br><em>honestly</em></h2>
+      <div class="divider reveal"></div>
+      <p class="reveal" style="font-size:14px; line-height:1.9; color:var(--text2); margin-bottom:1rem;">
+        There's something about the way you look at us — the softness in your eyes, the love you give so freely, the way
+        you care without being asked. Your love language is a whole world of its own sebaa.. And I've been lucky enough
+        to live in it for 1000 days.
+      </p>
+      <div class="pill-cloud reveal">
+        <span class="pill">Your eyes</span><span class="pill">Your care</span><span class="pill">Your smile</span>
+        <span class="pill">How you love</span><span class="pill">Your behaviour</span><span class="pill">Your
+          patience</span>
+        <span class="pill">The way you talk</span><span class="pill">Your love language</span>
+        <span class="pill">How you make me feel</span><span class="pill">Everything about you</span>
+      </div>
+    </section>
+
+    <div class="quote-band reveal">
+      <p>When you are near me, I stop thinking about everything else. That's you — my stillness in a noisy world.</p>
+      <small>— Always yours</small>
+    </div>
+
+    <section>
+      <p class="sec-eyebrow reveal">A letter</p>
+      <h2 class="sec-title reveal">To my <em>Darling...</em></h2>
+      <div class="divider reveal"></div>
+      <div class="letter-card reveal">
+        <div class="letter-text">
+          It's been thousand days daah...🥹😭💖<br><br>
+          From Sep-27th onwards we were both in love, right?😁💫❤️ And now look at the date — it's June-23rd😌✨. Can you
+          just believe it? It's been 1000 days... 1000 DAYS!!!!🥹😭❤️‍🔥💞 with my lover, my one and only
+          Sebaaz😘🥰<br><br>
+          You came into my life and made it softer. Warmer. You have this way of making me feel okay🫂💖 that I've never
+          seen in anyone else, and I hope you know how rare that is💎✨. The way you love is your superpower❤️, and I've
+          been quietly amazed by it from day one🥹💫. We have fought so many times😔💔 and hurt each other, but we
+          always sorted it out together❤️‍🩹 by giving space🌿 and through honest conversations🫶.<br><br>
+          As Keanu Reeves said ✨,<br><br>
+          *"Because if you don't fight for your love, what kind of love do you have?"*❤️🔥<br><br>
+          I admire you🥹❤️‍🩹. Your eyes👀✨. The way you talk🗣️💞. The way you handle things🤍💪. The way you make
+          ordinary moments feel like something worth holding on to forever 🥰💫. And as i say to you "You are
+          Unvaluable💎😚<br><br>
+          Distance today doesn't change anything between us. You're still the person I want to live every moment of my
+          life with 🥹❤️. From first sight👀✨ to just friends🤝😊, then best friendship🫂💖, and then the miracle
+          happened — The Love❤️‍🔥🌹. Every chapter 📖✨ has been better with you in it💕🥰.<br><br>
+          Here's to 1000 more🥂💖. And a thousand after that♾️❤️✨. No matter where life takes us🌎💫, my heart will
+          always find its way back to you🫶❤️.<br><br>
+          I love you so much, Sebaazeee...😘❤️🥹💍✨
+        </div>
+        <div class="letter-sign">— Always yours, Konshaaa ♡</div>
+      </div>
+    </section>
+
+    <footer class="reveal">
+      <div class="footer-names">Rinshad &amp; Sabeeha</div>
+      <span class="footer-heart">♡</span>
+      <p class="footer-note">1000 days · and counting</p>
+    </footer>
+
+  </div><!-- /main -->
+
+  <script>
+
+    // ═══════════════════════════════════════════════════════════
+    //  PLAYLIST SETUP
+    //  → Create a folder called "songs" next to your index.html
+    //  → Put your MP3 files inside that "songs" folder
+    //  → Replace the filenames below with your actual song names
+    //
+    //  Example: if your song file is named "Shape of You.mp3"
+    //  and it's inside the songs folder, write it like this:
+    //    'songs/Shape of You.mp3'
+    //
+    //  You can add or remove lines. Just keep the format:
+    //    'songs/yourfilename.mp3',
+    // ═══════════════════════════════════════════════════════════
+    const playlist = [
+      'songs/HUSN.mp3',   // ← replace song1.mp3 with your first song filename
+      'songs/Sajni.mp3',   // ← replace song2.mp3 with your second song filename
+      'songs/Arz.mp3',   // ← replace song3.mp3 with your third song filename
+    ];
+    // ═══════════════════════════════════════════════════════════
+
+    let currentTrack = 0;
+    let playing = false;
+    const audio = document.getElementById('bgaudio');
+
+    function loadAndPlay(index) {
+      audio.src = playlist[index];
+      audio.load();
+      audio.play().catch(() => { });
+    }
+
+    // When a song finishes, move to the next one automatically
+    audio.addEventListener('ended', () => {
+      currentTrack = (currentTrack + 1) % playlist.length; // loops back to 0 after last song
+      loadAndPlay(currentTrack);
+    });
+
+    audio.addEventListener('play', () => {
+      playing = true;
+      document.getElementById('audioBtn').textContent = '♫';
+      document.getElementById('audioBtn').style.opacity = '1';
+    });
+
+    audio.addEventListener('pause', () => {
+      playing = false;
+      document.getElementById('audioBtn').textContent = '♪';
+      document.getElementById('audioBtn').style.opacity = '0.6';
+    });
+
+    function toggleAudio() {
+      if (playing) {
+        audio.pause();
+      } else {
+        // If nothing loaded yet, load from beginning
+        if (!audio.src || audio.src === window.location.href) {
+          loadAndPlay(0);
+        } else {
+          audio.play().catch(() => { });
+        }
+      }
+    }
+
+    function enterSite() {
+      document.getElementById('landing').style.display = 'none';
+      document.getElementById('main').classList.add('visible');
+      window.scrollTo(0, 0);
+      initReveal();
+      loadAndPlay(0); // start playing song1 when she clicks "Enter our world"
+    }
+
+    function setTheme(t, btn) {
+      document.body.className = t === 'gold' ? '' : 'theme-' + t;
+      document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+    }
+
+    function initReveal() {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    }
+
+  </script>
+</body>
+
+</html>
